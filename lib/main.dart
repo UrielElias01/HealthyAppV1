@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:percent_indicator/percent_indicator.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:healtlyapp/services/mqtt_service.dart';
 import 'package:healtlyapp/services/notification_service.dart';
 
@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sensor Project',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         textTheme:
@@ -37,9 +38,12 @@ class _HomePageState extends State<HomePage> {
   double temperature = 0.0;
   int steps = 0;
   double caloriesBurned = 0.0;
-  final int dailyStepGoal = 10000; // Límite de pasos diario
+  int dailyStepGoal = 10000; // Límite de pasos recomendado por día
   late MqttService mqttService;
   late NotificationService notificationService;
+
+  // Datos simulados de pasos por día
+  List<int> stepsPerDay = [9000, 8000, 10000, 12000, 7500, 11000, 9500];
 
   @override
   void initState() {
@@ -74,45 +78,101 @@ class _HomePageState extends State<HomePage> {
                       '${caloriesBurned.toStringAsFixed(2)} kcal',
                       Icons.local_fire_department),
                   SizedBox(height: 20),
-                  _buildCircularStepIndicator(),
+                  CircularPercentIndicator(
+                    radius: 100.0,
+                    lineWidth: 10.0,
+                    percent: steps / dailyStepGoal,
+                    center: new Text(
+                      "${(steps / dailyStepGoal * 100).toStringAsFixed(1)}%",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    progressColor: Colors.blue,
+                    backgroundColor: Colors.grey.shade300,
+                    circularStrokeCap: CircularStrokeCap.round,
+                  ),
                   SizedBox(height: 20),
+                  Text(
+                    'Pasos durante la última semana',
+                    style: Theme.of(context).textTheme.titleLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 10),
                   Container(
                     height: 200,
-                    child: LineChart(
-                      LineChartData(
-                        gridData: FlGridData(show: false),
-                        titlesData: FlTitlesData(show: true),
+                    child: BarChart(
+                      BarChartData(
+                        alignment: BarChartAlignment.spaceAround,
+                        barGroups: stepsPerDay.asMap().entries.map((entry) {
+                          int index = entry.key;
+                          int steps = entry.value;
+                          return BarChartGroupData(
+                            x: index,
+                            barRods: [
+                              BarChartRodData(
+                                toY: steps.toDouble(),
+                                color: steps >= dailyStepGoal
+                                    ? Colors.green
+                                    : Colors.red,
+                                width: 16,
+                              ),
+                            ],
+                          );
+                        }).toList(),
                         borderData: FlBorderData(
-                          show: true,
-                          border: Border.all(
-                            color: const Color(0xff37434d),
-                            width: 1,
+                          show: false,
+                        ),
+                        titlesData: FlTitlesData(
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) {
+                                const style = TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 10,
+                                );
+                                switch (value.toInt()) {
+                                  case 0:
+                                    return Text('Lun', style: style);
+                                  case 1:
+                                    return Text('Mar', style: style);
+                                  case 2:
+                                    return Text('Mié', style: style);
+                                  case 3:
+                                    return Text('Jue', style: style);
+                                  case 4:
+                                    return Text('Vie', style: style);
+                                  case 5:
+                                    return Text('Sáb', style: style);
+                                  case 6:
+                                    return Text('Dom', style: style);
+                                  default:
+                                    return Text('', style: style);
+                                }
+                              },
+                            ),
+                          ),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) {
+                                const style = TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 10,
+                                );
+                                return Text(
+                                    value == 0
+                                        ? '0'
+                                        : value == dailyStepGoal.toDouble() / 2
+                                            ? '${(dailyStepGoal / 2).toInt()}'
+                                            : value == dailyStepGoal.toDouble()
+                                                ? '$dailyStepGoal'
+                                                : '',
+                                    style: style);
+                              },
+                            ),
                           ),
                         ),
-                        minX: 0,
-                        maxX: 10,
-                        minY: 0,
-                        maxY: 10,
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: [
-                              FlSpot(0, 1),
-                              FlSpot(1, 3),
-                              FlSpot(2, 5),
-                              FlSpot(3, 2),
-                              FlSpot(4, 7),
-                              FlSpot(5, 3),
-                              FlSpot(6, 5),
-                              FlSpot(7, 8),
-                              FlSpot(8, 6),
-                              FlSpot(9, 7),
-                            ],
-                            isCurved: true,
-                            color: Colors.blue,
-                            dotData: FlDotData(show: false),
-                            belowBarData: BarAreaData(show: false),
-                          ),
-                        ],
+                        gridData: FlGridData(show: false),
                       ),
                     ),
                   ),
@@ -155,27 +215,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildCircularStepIndicator() {
-    double percentComplete = steps / dailyStepGoal;
-    return CircularPercentIndicator(
-      radius: 120.0,
-      lineWidth: 13.0,
-      animation: true,
-      percent: percentComplete > 1.0 ? 1.0 : percentComplete,
-      center: Text(
-        "${(percentComplete * 100).toStringAsFixed(1)}%",
-        style: Theme.of(context).textTheme.titleLarge,
-      ),
-      footer: Text(
-        "Progreso de Pasos",
-        style: Theme.of(context).textTheme.bodyLarge,
-      ),
-      circularStrokeCap: CircularStrokeCap.round,
-      progressColor: percentComplete >= 1.0 ? Colors.green : Colors.blue,
-      backgroundColor: Colors.grey[300]!,
     );
   }
 
