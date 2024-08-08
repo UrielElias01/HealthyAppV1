@@ -128,23 +128,44 @@ class _HomePageState extends State<HomePage> {
                               getTitlesWidget: (value, meta) {
                                 const style = TextStyle(
                                   color: Colors.black,
-                                  fontSize: 10,
+                                  fontSize: 12,
                                 );
                                 switch (value.toInt()) {
                                   case 0:
-                                    return Text('Lun', style: style);
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text('Lun', style: style),
+                                    );
                                   case 1:
-                                    return Text('Mar', style: style);
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text('Mar', style: style),
+                                    );
                                   case 2:
-                                    return Text('Mié', style: style);
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text('Mié', style: style),
+                                    );
                                   case 3:
-                                    return Text('Jue', style: style);
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text('Jue', style: style),
+                                    );
                                   case 4:
-                                    return Text('Vie', style: style);
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text('Vie', style: style),
+                                    );
                                   case 5:
-                                    return Text('Sáb', style: style);
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text('Sáb', style: style),
+                                    );
                                   case 6:
-                                    return Text('Dom', style: style);
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text('Dom', style: style),
+                                    );
                                   default:
                                     return Text('', style: style);
                                 }
@@ -153,22 +174,20 @@ class _HomePageState extends State<HomePage> {
                           ),
                           leftTitles: AxisTitles(
                             sideTitles: SideTitles(
-                              showTitles: true,
-                              getTitlesWidget: (value, meta) {
-                                const style = TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 10,
-                                );
-                                return Text(
-                                    value == 0
-                                        ? '0'
-                                        : value == dailyStepGoal.toDouble() / 2
-                                            ? '${(dailyStepGoal / 2).toInt()}'
-                                            : value == dailyStepGoal.toDouble()
-                                                ? '$dailyStepGoal'
-                                                : '',
-                                    style: style);
-                              },
+                              showTitles:
+                                  false, // Ocultar títulos del eje izquierdo
+                            ),
+                          ),
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles:
+                                  false, // Ocultar títulos del eje derecho
+                            ),
+                          ),
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles:
+                                  false, // Ocultar títulos del eje superior
                             ),
                           ),
                         ),
