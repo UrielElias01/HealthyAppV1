@@ -4,6 +4,7 @@ Proyecto desarrollado por:
 - Elías Velázquez Ángel Uriel
 - Garay García Omar Ricardo
 
+
 ## Enunciado de Visión
 
 Desarrollar una aplicación de monitoreo de salud para dispositivos IoT que permita a los usuarios rastrear en tiempo real sus signos vitales, como la temperatura, humedad, y aceleración, mediante una conexión establecida con un módulo ESP32. Los datos serán almacenados y gestionados a través del protocolo MQTT utilizando Mosquitto, proporcionando así una solución eficiente y accesible para el seguimiento de la salud desde la comodidad de un smartphone.
