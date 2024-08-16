@@ -7,7 +7,8 @@ class MqttService {
   final NotificationService notificationService;
 
   MqttService(this.notificationService) {
-    client = MqttServerClient('broker.hivemq.com', '');
+    // Usa un identificador único para el cliente
+    client = MqttServerClient('broker.emqx.io', '');
     client.logging(on: true);
     client.onDisconnected = onDisconnected;
 
@@ -16,25 +17,35 @@ class MqttService {
 
   Future<void> _connectAndSubscribe() async {
     try {
-      await client.connect();
-      client.subscribe('sensor/temperature', MqttQos.atMostOnce);
-      client.subscribe('sensor/steps', MqttQos.atMostOnce);
+      // Conectar al broker
+      final MqttClientConnectionStatus? status = await client.connect();
+      if (status?.state == MqttConnectionState.connected) {
+        print('MQTT client connected');
+        // Suscribirse a los temas
+        client.subscribe('sensor/temperature', MqttQos.atMostOnce);
+        client.subscribe('health', MqttQos.atMostOnce);
 
-      // Verifica si el cliente no es null antes de intentar escuchar
-      client.updates?.listen(
-        (List<MqttReceivedMessage<MqttMessage>> event) {
-          onMessage(event);
-        },
-        onError: (error) {
-          print('Error en la recepción de mensajes: $error');
-        },
-        onDone: () {
-          print('Suscripción finalizada.');
-        },
-        cancelOnError: true,
-      );
+        // Escuchar mensajes
+        client.updates?.listen(
+          (List<MqttReceivedMessage<MqttMessage>> event) {
+            onMessage(event);
+          },
+          onError: (error) {
+            print('Error en la recepción de mensajes: $error');
+          },
+          onDone: () {
+            print('Suscripción finalizada.');
+          },
+          cancelOnError: true,
+        );
+      } else {
+        print(
+            'MQTT client connection failed - disconnecting, status is ${status?.state}');
+        client.disconnect();
+      }
     } catch (e) {
       print('Error al conectar o suscribirse: $e');
+      client.disconnect();
     }
   }
 
@@ -49,17 +60,25 @@ class MqttService {
         MqttPublishPayload.bytesToStringAsString(message.payload.message);
 
     if (topic == 'sensor/temperature') {
-      final double temperature = double.parse(payload);
-      if (temperature < 35) {
-        notificationService.showNotification(
-            'Alerta de Temperatura', 'La temperatura es baja.');
-      } else if (temperature > 38) {
-        notificationService.showNotification(
-            'Alerta de Temperatura', 'La temperatura es alta.');
+      try {
+        final double temperature = double.parse(payload);
+        if (temperature < 35) {
+          notificationService.showNotification(
+              'Alerta de Temperatura', 'La temperatura es baja.');
+        } else if (temperature > 38) {
+          notificationService.showNotification(
+              'Alerta de Temperatura', 'La temperatura es alta.');
+        }
+      } catch (e) {
+        print('Error al procesar mensaje de temperatura: $e');
       }
-    } else if (topic == 'sensor/steps') {
-      final int steps = int.parse(payload);
-      // Procesar pasos (actualizar UI u otras acciones)
+    } else if (topic == 'health') {
+      try {
+        final int steps = int.parse(payload);
+        // Procesar pasos (actualizar UI u otras acciones)
+      } catch (e) {
+        print('Error al procesar mensaje de health: $e');
+      }
     }
   }
 }
