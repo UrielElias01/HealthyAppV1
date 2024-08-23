@@ -4,10 +4,9 @@ Proyecto desarrollado por:
 - Elías Velázquez Ángel Uriel
 - Garay García Omar Ricardo
 
-
 ## Enunciado de Visión
 
-Desarrollar una aplicación de monitoreo de salud para dispositivos IoT que permita a los usuarios rastrear en tiempo real sus signos vitales, como la temperatura, humedad, y aceleración, mediante una conexión establecida con un módulo ESP32. Los datos serán almacenados y gestionados a través del protocolo MQTT utilizando Mosquitto, proporcionando así una solución eficiente y accesible para el seguimiento de la salud desde la comodidad de un smartphone.
+Desarrollar un circuito y una aplicación de monitoreo de salud que permita a los usuarios registrar los pasos realizado durante el día, como la temperatura, humedad, y calorías quemadas, mediante una conexión establecida con un módulo ESP32. Los datos serán almacenados y gestionados a través del protocolo MQTT utilizando Mosquitto, proporcionando así una solución eficiente y accesible para el seguimiento de la salud desde la comodidad de un smartphone.
 
 ## Software Empleado
 
@@ -15,14 +14,14 @@ Desarrollar una aplicación de monitoreo de salud para dispositivos IoT que perm
 
 | **Componente**                  | **Descripción**                                       | **Versión** | **Tipo**        |
 |---------------------------------|-------------------------------------------------------|-------------|-----------------|
-| **Lenguaje de Programación**    | Dart                                                  | x.x.x       | Lenguaje        |
-| **Framework**                   | Flutter                                               | x.x.x       | Framework       |
+| **Lenguaje de Programación**    | Dart                                                  | 3.94.0      | Lenguaje        |
+| **Framework**                   | Flutter                                               | 3.94.0      | Framework       |
 | **Backend**                     | Mosquitto MQTT                                        |             | Backend         |
-| **Base de Datos**               | [Base de Datos a Elegir, ej. Firebase, SQLite]        |             | Base de Datos   |
-| **Autenticación**               | [Autenticación a Elegir]                              |             | Autenticación   |
-| **Control de Versiones**        | Git                                                   |             | Control de Versión |
-| **IDE**                         | Visual Studio Code                                    |             | IDE             |
-| **Emulador**                    | Android Studio                                        |             | Emulador        |
+| **Base de Datos**               | MySql        |  8.0           | Base de Datos   |
+| **Control de Versiones**        | Git                                                   |  2.43.0.windows.1           | Control de Versión |
+| **IDE**                         | Visual Studio Code                                    |  1.92           | IDE             |
+| **IDE**                         | Arduino                                  |   1.8.19.          | IDE             |
+| **Emulador**                    | Android Studio                                        |    Koala13         | Emulador        |
 
 ## Hardware Empleado
 
@@ -35,12 +34,6 @@ Desarrollar una aplicación de monitoreo de salud para dispositivos IoT que perm
 | 5      | Pantalla OLED 128x32                 | Pantalla OLED para mostrar datos en tiempo real                                                        | ![Pantalla](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0xEVezQ607bIevqBh5xch5ma0XMIXLTt1GQ&s)     | 1            | $81.00                |
 | 6      | Kit Buzzer Zumbador 5V               | Zumbador activo para emitir alertas audibles                                                           | ![Buzzer](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMXy2A84nGyNNJUbl8ERSyD4lGIj6Fvrr7Kw&s)       | 1            | $39.00                |
 
-## Prototipos
-<p align="center">
-    <img src="./Primer boceto1.png" alt="Primer boceto" width="330"/>
-    <img src="./Segundo boceto2.png" alt="Segundo boceto" width="330"/>
-</p>
-
 ## Tablero Trello
    [Trello](https://trello.com/b/TBIptBx5/healtlyapp)
 
@@ -48,8 +41,18 @@ Desarrollar una aplicación de monitoreo de salud para dispositivos IoT que perm
 
 | Historia de Usuario              | Como                  | Quiero                                                | Para                                                   |
 |----------------------------------|-----------------------|-------------------------------------------------------|--------------------------------------------------------|
-| Registro de Signos Vitales       | Usuario               | Registrar mis signos vitales en tiempo real           | Monitorear mi salud de manera continua                 |
-| Notificaciones de Alertas        | Usuario               | Recibir alertas cuando mis signos vitales sean anormales | Actuar rápidamente en caso de emergencia                |
-| Visualización de Datos           | Usuario               | Ver mis datos de salud en una pantalla OLED           | Tener una referencia visual rápida y clara             |
-| Acceso Rápido                    | Usuario               | Acceder a los datos de mi salud desde la app          | Monitorear mis signos vitales en cualquier momento     |
+| Registro de Signos Vitales       | Usuario               | Registrar mis pasos dados durante el día           | Monitorear mi salud de manera continua                 |
+| Notificaciones de Alertas        | Usuario               | Observar las calorías quemadas | Monitorear mi salud de manera continua               |
+| Visualización de Datos           | Usuario               | Ver la temperatura ambiental en una pantalla OLED           | Tener una referencia visual rápida y clara             |
+| Acceso Rápido                    | Usuario               | Acceder a los datos de mi salud desde la app          | Monitorear mi salud en cualquier momento     |
 | Sincronización de Dispositivos   | Usuario               | Que los datos se sincronicen entre el ESP32 y mi smartphone | Tener acceso a la información actualizada en mi dispositivo móvil |
+
+## Imágenes del Proyecto Finalizado
+
+<p align="center">
+    <img src="./1.jpg" alt="Hardware"/>
+    <img src="./2.jpg" alt="Hardware 2" width="330"/>
+    <img src="./3.jpg" alt="Software" width="330"/>
+    <img src="./4.jpg" alt="Flow" width="330"/>
+    <img src="./5.jpg" alt="Dashboard" width="330"/>
+</p>
